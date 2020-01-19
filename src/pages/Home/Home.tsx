@@ -1,11 +1,26 @@
-import React from 'react'
+import React, { useEffect } from 'react'
+import { connect } from 'react-redux'
 import { Container, Grid, Dimmer, Loader, Message } from 'semantic-ui-react'
 import Card from 'components/Card'
+import { fetchBags } from 'actions/bags'
 import bagType from 'types/bag.t'
 import { StyledGrid } from './styles'
 
-const Home: React.FC = () => {
-  const data: bagType[] = [
+const mapStateToProps = ({ data }: { data: bagType[] }) => ({
+  data
+})
+
+const mapDispatchToProps = { fetchBags }
+
+interface propTypes {
+  data: bagType[]
+}
+
+const Home: React.FC<propTypes> = ({ data }) => {
+  useEffect(() => {
+    fetchBags()
+  })
+  const data2: bagType[] = [
     { name: 'Pedro', bags: 5 },
     { name: 'Maria', bags: 5 }
   ]
@@ -26,8 +41,8 @@ const Home: React.FC = () => {
             </Message.Header>
           </Message>
         ) : (
-          data &&
-          data.map(({ name, bags }) => (
+          data2 &&
+          data2.map(({ name, bags }) => (
             <Grid.Column key={name}>
               <Card key={name} name={name} bags={bags} />
             </Grid.Column>
@@ -38,4 +53,4 @@ const Home: React.FC = () => {
   )
 }
 
-export default Home
+export default connect(mapStateToProps, mapDispatchToProps)(Home)
